@@ -25,7 +25,21 @@ describe('Segmentation Testing', function() {
 		browser.driver.wait(function(){ return browser.driver.isElementPresent(by.id('contentPane_view-3')); }, 10000);
 		browser.switchTo().frame(browser.driver.findElement(by.id('contentPane_view-3'))).then(function(){
 			// click the details Link
-			element(by.xpath('//*[@id="dijit_layout_TabContainer_0_tablist"]/div[4]/div/div[2]')).click();
+			element(by.xpath('//*[@id="dijit_layout_TabContainer_0_tablist"]/div[4]/div/div[2]')).click().then(function(){
+				//browser.ignoreSynchronization = false;
+				//var segmentValues1 = element(by.binding('segmentValues1'));
+				//var test = browser.element(by.id('list1selection')).all(by.tagName('option')).count();
+				
+				browser.driver.findElements(by.css('#list1selection > option')).then(function (segments) {
+
+					expect(segments.length).toBeGreaterThan(0);
+				});
+				//console.log(browser.element(by.id('list1selection')).all(by.tagName('option').count()));
+				
+				//expect(segmentValues1.length).toBeGreaterThan(0);
+			});
+			//browser.driver.wait(2000);
+			
 		});
 		
 	  });
