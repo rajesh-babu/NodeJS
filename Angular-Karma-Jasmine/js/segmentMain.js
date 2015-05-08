@@ -33,7 +33,7 @@ app.controller('createSegmentCtrl', function($scope, $http, $timeout, $interval)
 	 * @param selectedSegArr - Array ( Already selected Segments Object Array)
 	 * @Return String (query format)
      */
-	$this.getSelectedSegmentsIds = function( selectedSegArr ){
+	function getSelectedSegmentsIds( selectedSegArr ){
 		
 		var resultStr = "";
 		for( var i=0; i < selectedSegArr.length; i++ ){
@@ -43,9 +43,10 @@ app.controller('createSegmentCtrl', function($scope, $http, $timeout, $interval)
 		
 		return "?id=" + resultStr;
 	}
+	$this.getSelectedSegmentsIds = getSelectedSegmentsIds;
 	  
 	/**
-	 * Fetch segments from DB based on the query and assign it to available segments list
+	 * Fetch segments from DB based on the query and assign it to available segments list. Need to scope it to '$this' as it's needed for unit testing 
 	 * @param query - String ( "" for all and String "?id=1,2,3" if selected segment ID is 1, 2 and 3 )
      */
 	function fetchSegments( query ){
@@ -58,8 +59,9 @@ app.controller('createSegmentCtrl', function($scope, $http, $timeout, $interval)
 		$scope.segmentValues1 = JSON.parse(JSON.stringify(dt));
 		updateSegmentCount();
 		});
-	  
+		
 	}
+	$this.fetchSegments = fetchSegments;
 	// Get the selected segments to 1st hidden input when opening the page in edit mode
 	var el = document.getElementById( 'segmentsListFw' ),
 		existingValue = el.getAttribute( "value" );		
@@ -71,8 +73,6 @@ app.controller('createSegmentCtrl', function($scope, $http, $timeout, $interval)
 	}else{ // get the full source list if the page is create mode			   
 		fetchSegments("");
 	}
-	
-	
 	 
   /**
    * Event handler for 'Add >' button, Move options from left to right. 
@@ -120,6 +120,7 @@ app.controller('createSegmentCtrl', function($scope, $http, $timeout, $interval)
 	  setSelectedSegments();
 	  updateSegmentCount();
   }
+  $this.addRemoveArr = addRemoveArr;
   
   /**
    * Returns the List based on the given input parameter
@@ -155,9 +156,9 @@ app.controller('createSegmentCtrl', function($scope, $http, $timeout, $interval)
       * Update the Segment Count for available and selected Segments
       */
        function updateSegmentCount(){
-    	   if($scope.segmentValues1.length)
+    	   if($scope.segmentValues1 && $scope.segmentValues1.length)
     		   $scope.segCount = $scope.segmentValues1.length;
-    	   if($scope.segmentValues2.length)
+    	   if($scope.segmentValues2 && $scope.segmentValues2.length)
     		   $scope.segSelectedCount = $scope.segmentValues2.length;
    		}
    
